@@ -19,3 +19,11 @@ Get hoyo daily login rewards automatically!
    (or ``--starrail`` for Honkai Star Rail)
 5. Done!
 
+### Docker
+
+The command line options are also available via environment variables which
+allows you to easily run this script in Docker/Podman!
+
+```bash
+$ docker run --rm --env GAME=starrail --env COOKIE="your cookie string" ghcr.io/atomicptr/hoyo-daily-logins-helper
+```
