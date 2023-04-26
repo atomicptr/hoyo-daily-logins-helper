@@ -1,6 +1,5 @@
 import os
-from http.cookies import SimpleCookie
-from typing import Optional, Dict
+from typing import Optional
 
 _default_configs = {
     "USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -18,8 +17,3 @@ def get_config(key: str) -> Optional[str]:
         return None
     return os.environ[key]
 
-
-def parse_cookie_string(cookie: str) -> Dict[str, str]:
-    c = SimpleCookie()
-    c.load(cookie)
-    return {k: v.value for k, v in c.items()}
