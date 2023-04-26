@@ -1,4 +1,5 @@
 FROM python:3.10
+LABEL org.opencontainers.image.source="https://github.com/atomicptr/hoyo-daily-logins-helper"
 
 WORKDIR /app
 
