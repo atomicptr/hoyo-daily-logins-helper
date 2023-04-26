@@ -27,3 +27,9 @@ allows you to easily run this script in Docker/Podman!
 ```bash
 $ docker run --rm --env GAME=starrail --env COOKIE="your cookie string" ghcr.io/atomicptr/hoyo-daily-logins-helper
 ```
+
+## License
+
+GNU General Public License v3
+
+![](https://www.gnu.org/graphics/gplv3-127x51.png)
