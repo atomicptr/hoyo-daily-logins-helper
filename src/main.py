@@ -1,16 +1,13 @@
 import argparse
 import os
 import sys
+import logging
 
-from src.config import log
 from src.games import genshin, starrail
 
 
 def main():
     """ Main function for CLI """
-    log.info("Hoyo Daily Logins Helper")
-    log.info("If this tool fails, try to update your cookie!")
-
     parser = argparse.ArgumentParser(
         prog="hoyo-daily-logins-helper",
         description="Get hoyo daily login rewards automatically!",
@@ -35,7 +32,22 @@ def main():
         action="store_true",
     )
 
+    parser.add_argument(
+        "--debug",
+        help="run with debug flags",
+        action="store_true"
+    )
+
     args = parser.parse_args(sys.argv[1:])
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.debug else logging.INFO,
+        format="[%(asctime)s][%(levelname)s]: %(message)s",
+        datefmt="%Y-%m-%dT%H:%M:%S"
+    )
+
+    logging.info("Hoyo Daily Logins Helper")
+    logging.info("If this tool fails, try to update your cookie!")
 
     game_args = [
         args.genshin,
@@ -44,7 +56,7 @@ def main():
 
     if not args.cookie:
         if "COOKIE" not in os.environ:
-            log.error("Cookies are not set!")
+            logging.error("Cookies are not set!")
             sys.exit(1)
         args.cookie = os.environ["COOKIE"]
 
@@ -52,7 +64,7 @@ def main():
 
     for game_set in game_args:
         if game_set and one_game_set:
-            log.error("More than one game was set!")
+            logging.error("More than one game was set!")
             sys.exit(1)
         if game_set:
             one_game_set = True
@@ -62,7 +74,7 @@ def main():
                 "GAME" not in os.environ and
                 os.environ["GAME"] not in ["genshin", "starrail"]
         ):
-            log.error("No game was set!")
+            logging.error("No game was set!")
             sys.exit(1)
 
         if os.environ["GAME"] == "genshin":

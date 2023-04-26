@@ -1,4 +1,3 @@
-import logging
 import os
 from http.cookies import SimpleCookie
 from typing import Optional, Dict
@@ -10,14 +9,6 @@ _default_configs = {
 }
 
 CONFIG_USER_AGENT = "USER_AGENT"
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="[%(asctime)s][%(levelname)s]: %(message)s",
-    datefmt="%Y-%m-%dT%H:%M:%S"
-)
-
-log = logging
 
 
 def get_config(key: str) -> Optional[str]:

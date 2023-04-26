@@ -5,7 +5,7 @@ from typing import Dict
 import requests
 from requests import HTTPError, Response
 
-from src.config import get_config, log
+from src.config import get_config, CONFIG_USER_AGENT
 
 
 def http_get(url: str, max_retries: int = 2, **kwargs) -> Response:
@@ -36,11 +36,11 @@ def http_request(
 ) -> Response:
     for i in range(max_retries + 1):
         try:
-            log.debug(f"{method.upper()} {url}, REQ: {i+1}/{max_retries}")
+            logging.debug(f"{method.upper()} {url}, REQ: {i+1}/{max_retries}")
             session = requests.Session()
-            session.headers["USER_AGENT"] = get_config("USER_AGENT")
+            session.headers["USER_AGENT"] = get_config(CONFIG_USER_AGENT)
             resp = session.request(method, url, **kwargs)
-            log.debug(f"Response: {resp.status_code}\n\n{resp.text}\n")
+            logging.debug(f"Response: {resp.status_code}\n\n{resp.text}\n")
         except HTTPError as e:
             logging.error(f"HTTP error: {e}, REQ: {i+1}/{max_retries}")
         except KeyError as e:

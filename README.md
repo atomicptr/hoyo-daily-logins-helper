@@ -6,7 +6,7 @@ Get hoyo daily login rewards automatically!
 
 1. Get your cookie string, open the daily check in page
    * [Daily Check-in page for Genshin](https://act.hoyolab.com/ys/event/signin-sea-v3/index.html?act_id=e202102251931481)
-   * [Daily Check-in page for Star Rail](#test)
+   * [Daily Check-in page for Star Rail](https://act.hoyolab.com/bbs/event/signin/hkrpg/index.html?act_id=e202303301540311)
 2. Open a development console (F12) and insert the following code:
     ```javascript
     document.cookie
