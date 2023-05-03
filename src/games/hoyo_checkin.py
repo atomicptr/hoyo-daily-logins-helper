@@ -4,6 +4,7 @@ import time
 import logging
 
 from src.http import http_get_json, http_post_json
+from src.config import get_config, CONFIG_LANG
 
 
 RET_CODE_ALREADY_SIGNED_IN = -5003
@@ -14,7 +15,7 @@ def hoyo_checkin(
     act_id: str,
     cookie_str: str
 ):
-    lang = "en-us"
+    lang = get_config(CONFIG_LANG)
     referer_url = "https://act.hoyolab.com/"
     reward_url = f"{event_base_url}/home?lang={lang}" \
                  f"&act_id={act_id}"
