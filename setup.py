@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as file:
 
 setuptools.setup(
     name="hoyo_daily_logins_helper",
-    version="1.0.1",
+    version="1.1.0",
     entry_points={
         "console_scripts": ["hoyo-daily-logins-helper=src.main:main"],
     },
