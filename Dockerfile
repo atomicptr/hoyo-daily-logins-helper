@@ -1,11 +1,20 @@
-FROM python:3.10
+FROM python:3.11 AS builder
+
+WORKDIR /app
+
+COPY . /app
+
+RUN pip install -r requirements.txt && \
+    pip install build && \
+    python -m build --sdist --wheel --outdir dist/ .
+
+FROM python:3.11
 LABEL org.opencontainers.image.source="https://github.com/atomicptr/hoyo-daily-logins-helper"
 
 WORKDIR /app
 
-COPY src /app/src
-COPY requirements.txt /app
+COPY --from=builder /app/dist /app/dist
 
-RUN pip install -r requirements.txt
+RUN pip install dist/hoyo_daily_logins_helper-*.whl
 
-CMD ["python", "-m", "src"]
+CMD ["hoyo-daily-logins-helper"]
