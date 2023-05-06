@@ -41,6 +41,9 @@ def main():
 
     args = parser.parse_args(sys.argv[1:])
 
+    if os.getenv("DEBUG_MODE"):
+        args.debug = True
+
     logging.basicConfig(
         level=logging.DEBUG if args.debug else logging.INFO,
         format="[%(asctime)s][%(levelname)s]: %(message)s",
@@ -55,17 +58,21 @@ def main():
         args.starrail,
     ]
 
+    # if the flag was not set, check if the environment variable is
     if not args.cookie:
-        if "COOKIE" not in os.environ:
-            logging.error("Cookies are not set!")
-            sys.exit(1)
-        args.cookie = os.environ["COOKIE"]
+        args.cookie = os.getenv("COOKIE")
+
+    if not args.cookie:
+        logging.error(
+            "Cookies are not set, please set the COOKIE environment variable or "
+            "--cookie flag")
+        sys.exit(1)
 
     one_game_set = False
 
     for game_set in game_args:
         if game_set and one_game_set:
-            logging.error("More than one game was set!")
+            logging.error("You set more than one game, please use either 'genshin' or 'starrail'")
             sys.exit(1)
         if game_set:
             one_game_set = True

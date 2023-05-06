@@ -38,6 +38,35 @@ $ pip install hoyo-daily-logins-helper
 
 PyPi: https://pypi.org/project/hoyo-daily-logins-helper/
 
+
+## Configuration
+
+### Cookie
+
+You can provide the cookie information either via the **COOKIE** environment variable or using the --cookie CLI flag.
+
+### Game
+
+You can provide the cookie information either via the **GAME** environment variable or using the --genshin/--starrail CLI flags.
+
+**Supported Games**: Genshin Impact (genshin), Honkai Starrail (starrail)
+
+### Debug mode
+
+If something doesn't work properly and/or you want to report an issue try running the tool with the **DEBUG_MODE** environment variable set to 1! Or provide the --debug flag!
+
+```bash
+$ DEBUG_MODE=1 hoyo-daily-logins-helper --starrail --cookie="..."
+```
+
+### Language
+
+If you want to see the results in other languages than English you can change them via the **LANGUAGE** environment variable
+
+```bash
+$ LANGUAGE=ja-jp hoyo-daily-logins-helper --genshin --cookie="..."
+```
+
 ## License
 
 GNU General Public License v3
