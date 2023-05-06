@@ -25,7 +25,7 @@ jobs:
         run: ruff check src
       - name: Build
         run: |
-          pip install wheel
+          pip install build
           make build
           make install
           which hoyo-daily-logins-helper

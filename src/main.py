@@ -4,6 +4,7 @@ import sys
 import logging
 
 from src.games import genshin, starrail
+from src._version import __version__
 
 
 def main():
@@ -46,7 +47,7 @@ def main():
         datefmt="%Y-%m-%dT%H:%M:%S"
     )
 
-    logging.info("Hoyo Daily Logins Helper")
+    logging.info(f"Hoyo Daily Logins Helper - v{__version__}")
     logging.info("If this tool fails, try to update your cookie!")
 
     game_args = [
