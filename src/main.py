@@ -64,15 +64,18 @@ def main():
 
     if not args.cookie:
         logging.error(
-            "Cookies are not set, please set the COOKIE environment variable or "
-            "--cookie flag")
+            "Cookies are not set, please set the COOKIE environment variable "
+            "or --cookie flag")
         sys.exit(1)
 
     one_game_set = False
 
     for game_set in game_args:
         if game_set and one_game_set:
-            logging.error("You set more than one game, please use either 'genshin' or 'starrail'")
+            logging.error(
+                "You set more than one game, please use either 'genshin' or "
+                "'starrail'"
+            )
             sys.exit(1)
         if game_set:
             one_game_set = True
