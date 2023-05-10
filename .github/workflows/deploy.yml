@@ -15,11 +15,17 @@ jobs:
           registry: ghcr.io
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
-      - run: |
-          docker build . \
-            --tag ghcr.io/atomicptr/hoyo-daily-logins-helper:latest \
-            --tag ghcr.io/atomicptr/hoyo-daily-logins-helper:${{ github.ref_name }}
-          docker push --all-tags ghcr.io/atomicptr/hoyo-daily-logins-helper
+      - uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: >-
+            linux/amd64,
+            linux/arm64
+          push: true
+          tags: >-
+            ghcr.io/atomicptr/hoyo-daily-logins-helper:latest,
+            ghcr.io/atomicptr/hoyo-daily-logins-helper:${{ github.ref_name }}
+
   deploy-pypi:
     runs-on: ubuntu-latest
     permissions:
