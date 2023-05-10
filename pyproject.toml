@@ -16,6 +16,7 @@ classifiers = [
 ]
 dependencies = [
     "requests",
+    "comboparse",
 ]
 dynamic = ["version"]
 

@@ -4,11 +4,10 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip install -r requirements.txt && \
-    pip install build && \
+RUN pip install build && \
     python -m build --sdist --wheel --outdir dist/ .
 
-FROM python:3.11
+FROM python:3.11-slim
 LABEL org.opencontainers.image.source="https://github.com/atomicptr/hoyo-daily-logins-helper"
 
 WORKDIR /app

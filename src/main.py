@@ -1,48 +1,64 @@
-import argparse
-import os
-import sys
 import logging
+import sys
 
-from src.games import genshin, starrail
+import comboparse
+
 from src._version import __version__
+from src.games import GAMES, game_perform_checkin
+from src.http import http_set_user_agent
+
+_DEFAULT_LANGUAGE = "en-us"
 
 
 def main():
     """ Main function for CLI """
-    parser = argparse.ArgumentParser(
+    parser = comboparse.ComboParser(
         prog="hoyo-daily-logins-helper",
         description="Get hoyo daily login rewards automatically!",
+        env_prefix="HOYO",
     )
 
     parser.add_argument(
         "-c", "--cookie",
         type=str,
-        help="your login cookie",
+        help="the cookie(s) for your accounts",
+        action="append",
+        required=True,
+    )
+
+    parser.add_argument(
+        "-g", "--game",
+        help="the game(s) for which this tool is supposed to run",
+        action="append",
+        choices=GAMES.keys(),
+        required=True,
+    )
+
+    parser.add_argument(
+        "--user-agent",
+        help="run the requests against the API with a different user agent",
         action="store",
     )
 
     parser.add_argument(
-        "--genshin",
-        help="run the tool for Genshin Impact",
-        action="store_true",
-    )
-
-    parser.add_argument(
-        "--starrail",
-        help="run the tool for Honkai Star Rail",
-        action="store_true",
+        "--language",
+        help="return results in a different language",
+        default=_DEFAULT_LANGUAGE,
     )
 
     parser.add_argument(
         "--debug",
         help="run with debug flags",
-        action="store_true"
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "-v", "--version",
+        action="version",
+        version=__version__,
     )
 
     args = parser.parse_args(sys.argv[1:])
-
-    if os.getenv("DEBUG_MODE"):
-        args.debug = True
 
     logging.basicConfig(
         level=logging.DEBUG if args.debug else logging.INFO,
@@ -52,48 +68,18 @@ def main():
 
     logging.info(f"Hoyo Daily Logins Helper - v{__version__}")
     logging.info("If this tool fails, try to update your cookie!")
+    logging.debug(f"Arguments: {args}")
 
-    game_args = [
-        args.genshin,
-        args.starrail,
-    ]
-
-    # if the flag was not set, check if the environment variable is
-    if not args.cookie:
-        args.cookie = os.getenv("COOKIE")
-
-    if not args.cookie:
+    if len(args.cookie) != len(args.game):
         logging.error(
-            "Cookies are not set, please set the COOKIE environment variable "
-            "or --cookie flag")
-        sys.exit(1)
+            f"number of cookies ({len(args.cookie)}) and "
+            f"games ({len(args.game)}) does not match"
+        )
+        exit(1)
 
-    one_game_set = False
+    if args.user_agent:
+        http_set_user_agent(args.user_agent)
 
-    for game_set in game_args:
-        if game_set and one_game_set:
-            logging.error(
-                "You set more than one game, please use either 'genshin' or "
-                "'starrail'"
-            )
-            sys.exit(1)
-        if game_set:
-            one_game_set = True
-
-    if not one_game_set:
-        if (
-                "GAME" not in os.environ and
-                os.environ["GAME"] not in ["genshin", "starrail"]
-        ):
-            logging.error("No game was set!")
-            sys.exit(1)
-
-        if os.environ["GAME"] == "genshin":
-            args.genshin = True
-        elif os.environ["GAME"] == "starrail":
-            args.starrail = True
-
-    if args.genshin:
-        genshin.run(args.cookie)
-    elif args.starrail:
-        starrail.run(args.cookie)
+    for index, game in enumerate(args.game):
+        cookie = args.cookie[index]
+        game_perform_checkin(f"Account #{index}", game, cookie, args.language)
