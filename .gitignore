@@ -1,4 +1,6 @@
 /.vscode
+/hoyo-daily-logins-helper.toml
+/_hoyo-daily-logins-helper.toml
 src/_version.py
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,linux,python,intellij+all,visualstudiocode

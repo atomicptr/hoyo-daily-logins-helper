@@ -1,0 +1,12 @@
+[config]
+language = "en-us"
+
+[[accounts]]
+identifier = "My Genshin Account Name" # this serves no purpose beyond identification for you in the logs
+game = "genshin"
+cookie = "My Genshin Cookie..."
+
+[[accounts]]
+identifier = "My Starrail Account Name"
+game = "starrail"
+cookie = "My Starrail Cookie..."

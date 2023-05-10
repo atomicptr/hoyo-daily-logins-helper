@@ -9,7 +9,7 @@ authors = [
 ]
 description = "Get hoyo daily login rewards automatically!"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = ["genshin", "genshin-impact", "starrail", "honkai-starrail", "game"]
 classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
