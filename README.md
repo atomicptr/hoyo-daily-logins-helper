@@ -5,8 +5,10 @@ Get hoyo daily login rewards automatically!
 ## Usage
 
 1. Get your cookie string, open the daily check in page
-   * [Daily Check-in page for Genshin](https://act.hoyolab.com/ys/event/signin-sea-v3/index.html?act_id=e202102251931481)
-   * [Daily Check-in page for Star Rail](https://act.hoyolab.com/bbs/event/signin/hkrpg/index.html?act_id=e202303301540311)
+   * [Daily Check-in page for Genshin Impact](https://act.hoyolab.com/ys/event/signin-sea-v3/index.html?act_id=e202102251931481)
+   * [Daily Check-in page for Honkai: Star Rail](https://act.hoyolab.com/bbs/event/signin/hkrpg/index.html?act_id=e202303301540311)
+   * [Daily Check-in page for Honkai Impact 3rd](https://act.hoyolab.com/bbs/event/signin-bh3/index.html?act_id=e202110291205111)
+   * [Daily Check-in page for Tears of Themis](https://act.hoyolab.com/bbs/event/signin/nxx/index.html?act_id=e202202281857121)
 2. Open a development console (F12) and insert the following code:
     ```javascript
     document.cookie
@@ -49,7 +51,11 @@ You can provide the cookie information either via the **HOYO_COOKIE** environmen
 
 You can provide the cookie information either via the **HOYO_GAME** environment variable or using the --game NAME/--genshin/--starrail CLI flags.
 
-**Supported Games**: Genshin Impact (genshin), Honkai Starrail (starrail)
+**Supported Games**:
+* Genshin Impact (genshin)
+* Honkai: Star Rail (starrail)
+* Honkai Impact 3rd (honkai)
+* Tears of Themis (themis)
 
 ### Debug mode
 

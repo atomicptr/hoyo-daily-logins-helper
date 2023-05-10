@@ -18,6 +18,16 @@ GAMES = {
         "name": "Honkai: Star Rail",
         "event_base_url": "https://sg-public-api.hoyolab.com/event/luna/os",
         "act_id": "e202303301540311",
+    },
+    "honkai": {
+        "name": "Honkai Impact 3rd",
+        "event_base_url": "https://sg-public-api.hoyolab.com/event/mani",
+        "act_id": "e202110291205111",
+    },
+    "themis": {
+        "name": "Tears of Themis",
+        "event_base_url": "https://sg-public-api.hoyolab.com/event/luna/os",
+        "act_id": "e202202281857121",
     }
 }
 

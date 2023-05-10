@@ -10,3 +10,13 @@ cookie = "My Genshin Cookie..."
 identifier = "My Starrail Account Name"
 game = "starrail"
 cookie = "My Starrail Cookie..."
+
+[[accounts]]
+identifier = "My Honkai Impact 3rd Account Name"
+game = "honkai"
+cookie = "My Honkai Impact 3rd cookie..."
+
+[[accounts]]
+identifier = "My Tears of Themis Account Name"
+game = "themis"
+cookie = "My Tears of Themis cookie..."
