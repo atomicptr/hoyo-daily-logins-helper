@@ -70,8 +70,8 @@ def main():
             f"--{game}",
             help=f"run for game {game_name}",
             action="store_const",
-            dest="game",
-            const=[game],
+            dest="overwrite_game",
+            const=game,
         )
 
     parser.add_argument(
@@ -116,11 +116,12 @@ def main():
     logging.info("If this tool fails, try to update your cookie!")
     logging.debug(f"Arguments: {args}")
 
+    if args.overwrite_game:
+        args.game = [args.overwrite_game]
+
     if has_legacy_environment_variable():
         logging.debug("Legacy environment variable found")
 
-        if "LANG" in os.environ:
-            args.language = os.environ["LANG"]
         if "LANGUAGE" in os.environ:
             args.language = os.environ["LANGUAGE"]
         if "COOKIE" in os.environ:

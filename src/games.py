@@ -50,6 +50,11 @@ def game_perform_checkin(
 
     info_list = http_get_json(info_url, headers=headers)
 
+    if not info_list.get("data"):
+        message = info_list.get("message", "None")
+        logging.error(f"Could not retrieve data from API endpoint: {message}")
+        return
+
     today = info_list.get("data", {}).get("today")
     total_sign_in_day = info_list.get("data", {}).get("total_sign_day")
     already_signed_in = info_list.get("data", {}).get("is_sign")
