@@ -8,3 +8,6 @@ install: build
 
 clean:
 	rm -rf build dist hoyo_daily_logins_helper.egg-info
+
+freeze:
+	python -m piptools compile -o requirements.txt pyproject.toml

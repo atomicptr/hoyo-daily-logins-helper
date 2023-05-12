@@ -7,10 +7,10 @@ from pathlib import Path
 import comboparse
 
 from src._version import __version__
+from src.consts import DEFAULT_LANGUAGE
 from src.games import GAMES, game_perform_checkin
 from src.http import http_set_user_agent
-
-_DEFAULT_LANGUAGE = "en-us"
+from src.scheduler import run_scheduler
 
 
 def main():
@@ -83,7 +83,7 @@ def main():
     parser.add_argument(
         "--language",
         help="return results in a different language",
-        default=_DEFAULT_LANGUAGE,
+        default=DEFAULT_LANGUAGE,
     )
 
     parser.add_argument(
@@ -129,32 +129,31 @@ def main():
         if "GAME" in os.environ:
             args.game = [os.environ["GAME"]]
 
+    enable_scheduler = False
     account_identifiers = [None for _ in args.game]
 
     if args.config_file:
         logging.info(f"Found config file at: {args.config_file}")
 
         with open(args.config_file, "rb") as file:
-            data = tomllib.load(file)
+            config_data = tomllib.load(file)
 
             # parse config from toml file
-            debug_mode = data.get("config", {}).get("debug", None)
-
-            if debug_mode:
-                args.debug = True
-
-            language = data.get("config", {}).get("language", None)
+            language = config_data.get("config", {}).get("language", None)
 
             if language:
                 args.language = language
 
-            user_agent = data.get("config", {}).get("user-agent", None)
+            user_agent = config_data.get("config", {}).get("user-agent", None)
 
             if user_agent:
                 args.user_agent = user_agent
 
+            enable_scheduler = config_data.get("config", {})\
+                .get("enable_scheduler", False)
+
             # parse accounts
-            for index, account in enumerate(data.get("accounts", [])):
+            for index, account in enumerate(config_data.get("accounts", [])):
                 game = account.get("game", None)
                 cookie = account.get("cookie", None)
 
@@ -163,7 +162,9 @@ def main():
                     continue
 
                 if game not in GAMES:
-                    logging.error(f"account #{index} has invalid game '{game}' set")
+                    logging.error(
+                        f"account #{index} has invalid game '{game}' set"
+                    )
                     continue
 
                 if not cookie:
@@ -183,6 +184,10 @@ def main():
 
     if args.user_agent:
         http_set_user_agent(args.user_agent)
+
+    if enable_scheduler:
+        run_scheduler(config_data, args.language)
+        return
 
     for index, game in enumerate(args.game):
         identifier = f"Account #{index}"

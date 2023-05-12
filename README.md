@@ -128,6 +128,44 @@ game = "starrail"
 cookie = "My Starrail Cookie..."
 ```
 
+## Scheduler mode
+
+Scheduler mode can only be used if you are working with a configuration file. To
+enable the scheduler mode, set ``enable_scheduler = true`` in the `config` section.
+
+```toml
+[config]
+# ...
+enable_scheduler = true
+
+[[accounts]]
+# ....
+```
+
+This feature also requires you to set account regions which you can do like this:
+
+```toml
+[config]
+# ...
+enable_scheduler = true
+region = "EU"
+
+[[accounts]]
+identifier = "My Starrail Account #1"
+game = "starrail"
+cookie = "My Starrail Cookie..."
+# this account is in the EU region and we set this as the default so you dont have to do anything
+
+[[accounts]]
+identifier = "My Starrail Account #2"
+game = "starrail"
+cookie = "My Starrail Cookie..."
+# this account is in a different region so you have to explicitly overwrite this
+region = "Asia"
+```
+
+If you are not setting the regions properly the scheduler will run at the wrong time.
+
 ## License
 
 GNU General Public License v3
