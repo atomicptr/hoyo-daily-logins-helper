@@ -17,8 +17,8 @@ classifiers = [
 dependencies = [
     "requests",
     "comboparse",
+    "scheduler",
     "pytz",
-    "apscheduler",
 ]
 dynamic = ["version"]
 

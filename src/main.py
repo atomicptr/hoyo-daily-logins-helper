@@ -200,7 +200,7 @@ def main():
 
 
 def has_legacy_environment_variable() -> bool:
-    for env_var in ["LANG", "LANGUAGE", "COOKIE", "GAME"]:
+    for env_var in ["LANGUAGE", "COOKIE", "GAME"]:
         if env_var in os.environ:
             return True
     return False

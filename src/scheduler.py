@@ -1,8 +1,9 @@
 import logging
+from datetime import datetime, timezone, time
+from time import sleep
 
-from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.triggers.cron import CronTrigger
-from pytz import timezone
+import pytz
+from scheduler import Scheduler
 
 from src.games import game_perform_checkin
 
@@ -14,19 +15,18 @@ _RESET_TIME = {
 }
 
 _RESET_TIMES = {
-    "Asia": CronTrigger(timezone=timezone("Etc/GMT+8"), **_RESET_TIME),
-    "EU": CronTrigger(timezone=timezone("Etc/GMT+1"), **_RESET_TIME),
-    "NA": CronTrigger(timezone=timezone("Etc/GMT-5"), **_RESET_TIME)
+    "Asia": time(tzinfo=pytz.timezone("Etc/GMT+8"), **_RESET_TIME),
+    "EU": time(tzinfo=pytz.timezone("Etc/GMT+1"), **_RESET_TIME),
+    "NA": time(tzinfo=pytz.timezone("Etc/GMT-5"), **_RESET_TIME),
 }
 
 
 def run_scheduler(config_data: dict, language: str):
     logging.info("Run in scheduler mode")
 
-    # only show warnings and above from apscheduler
-    logging.getLogger("apscheduler").setLevel(logging.WARNING)
+    tz = datetime.now(timezone.utc).astimezone().tzinfo
 
-    scheduler = BlockingScheduler()
+    schedule = Scheduler(tzinfo=tz)
 
     accounts = config_data.get("accounts", [])
     default_region = config_data.get("config", {}).get("region", None)
@@ -47,32 +47,45 @@ def run_scheduler(config_data: dict, language: str):
         if not identifier:
             identifier = f"Account #{index}"
 
-        scheduler.add_job(
-            create_checkin_job(
-                identifier,
-                account.get("game"),
-                account.get("cookie"),
-                language,
-            ),
-            _RESET_TIMES[region]
+        checkin_job = create_checkin_job(
+            identifier,
+            account.get("game"),
+            account.get("cookie"),
+            language,
+        )
+
+        job = schedule.daily(
+            _RESET_TIMES[region],
+            checkin_job
+        )
+
+        due_in_hours = round(
+            job.timedelta(datetime.now(tz=tz)).total_seconds() / 60 / 60,#
+            1
         )
 
         logging.info(
-            f"Added account '{identifier}' to scheduler, region: '{region}'"
+            f"Added account '{identifier}' to scheduler, region: '{region}', "
+            f"next fire time in {due_in_hours} hours"
         )
 
-    if len(scheduler.get_jobs()) == 0:
+    if len(schedule.jobs) == 0:
         logging.error("No jobs scheduled")
         exit(1)
 
-    scheduler.start()
+    logging.debug("Job schedule:")
+    logging.debug(schedule)
+
+    while True:
+        schedule.exec_jobs()
+        sleep(60)
 
 
 def create_checkin_job(
-    account_ident: str,
-    game: str,
-    cookie_str: str,
-    language: str
+        account_ident: str,
+        game: str,
+        cookie_str: str,
+        language: str
 ):
     def _checkin_job():
         logging.info(f"Running scheduler for '{account_ident}'...")

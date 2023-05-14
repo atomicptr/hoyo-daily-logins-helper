@@ -4,8 +4,6 @@
 #
 #    pip-compile --output-file=requirements.txt pyproject.toml
 #
-apscheduler==3.10.1
-    # via hoyo-daily-logins-helper (pyproject.toml)
 certifi==2023.5.7
     # via requests
 charset-normalizer==3.1.0
@@ -15,21 +13,12 @@ comboparse==1.0.1
 idna==3.4
     # via requests
 pytz==2023.3
-    # via
-    #   apscheduler
-    #   hoyo-daily-logins-helper (pyproject.toml)
-pytz-deprecation-shim==0.1.0.post0
-    # via tzlocal
+    # via hoyo-daily-logins-helper (pyproject.toml)
 requests==2.30.0
     # via hoyo-daily-logins-helper (pyproject.toml)
-six==1.16.0
-    # via apscheduler
-tzdata==2023.3
-    # via pytz-deprecation-shim
-tzlocal==4.3
-    # via apscheduler
+scheduler==0.8.4
+    # via hoyo-daily-logins-helper (pyproject.toml)
+typeguard==4.0.0
+    # via scheduler
 urllib3==2.0.2
     # via requests
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
