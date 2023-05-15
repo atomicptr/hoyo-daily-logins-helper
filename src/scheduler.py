@@ -17,9 +17,9 @@ _RESET_TIME = {
 }
 
 _RESET_TIMES = {
-    "Asia": time(tzinfo=pytz.timezone("Etc/GMT+8"), **_RESET_TIME),
-    "EU": time(tzinfo=pytz.timezone("Etc/GMT+1"), **_RESET_TIME),
-    "NA": time(tzinfo=pytz.timezone("Etc/GMT-5"), **_RESET_TIME),
+    "Asia": time(tzinfo=pytz.timezone("Asia/Shanghai"), **_RESET_TIME),
+    "EU": time(tzinfo=pytz.timezone("CET"), **_RESET_TIME),
+    "NA": time(tzinfo=pytz.timezone("US/Pacific"), **_RESET_TIME),
 }
 
 
