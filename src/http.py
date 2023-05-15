@@ -5,6 +5,8 @@ from typing import Dict
 import requests
 from requests import HTTPError, Response
 
+from src.utils import dict_prettify
+
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " \
               "AppleWebKit/537.36 (KHTML, like Gecko) " \
               "Chrome/74.0.3729.169 Safari/537.36"
@@ -45,9 +47,13 @@ def http_request(
         try:
             logging.debug(f"{method.upper()} {url}, REQ: {i+1}/{max_retries}")
             session = requests.Session()
-            session.headers["USER_AGENT"] = _http_req_settings["user_agent"]
+            session.headers["User-Agent"] = _http_req_settings["user_agent"]
             resp = session.request(method, url, **kwargs)
-            logging.debug(f"Response: {resp.status_code}\n\n{resp.text}\n")
+
+            text = resp.text
+            if resp.headers.get("Content-Type", "") == "application/json":
+                text = dict_prettify(json.loads(text))
+            logging.debug(f"Response: {resp.status_code}\n\n{text}\n")
         except HTTPError as e:
             logging.error(f"HTTP error: {e}, REQ: {i+1}/{max_retries}")
         except KeyError as e:

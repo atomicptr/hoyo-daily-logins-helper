@@ -3,6 +3,7 @@ import os
 import sys
 import tomllib
 from pathlib import Path
+from typing import Optional
 
 import comboparse
 
@@ -10,7 +11,9 @@ from src._version import __version__
 from src.consts import DEFAULT_LANGUAGE
 from src.games import GAMES, game_perform_checkin
 from src.http import http_set_user_agent
+from src.notifications import NotificationManager
 from src.scheduler import run_scheduler
+from src.utils import dict_prettify
 
 
 def main():
@@ -131,12 +134,14 @@ def main():
 
     enable_scheduler = False
     account_identifiers = [None for _ in args.game]
+    notification_manager: Optional[NotificationManager] = None
 
     if args.config_file:
         logging.info(f"Found config file at: {args.config_file}")
 
         with open(args.config_file, "rb") as file:
             config_data = tomllib.load(file)
+            logging.debug(dict_prettify(config_data))
 
             # parse config from toml file
             language = config_data.get("config", {}).get("language", None)
@@ -151,6 +156,10 @@ def main():
 
             enable_scheduler = config_data.get("config", {})\
                 .get("enable_scheduler", False)
+
+            notifications = config_data.get("config", {}).get("notifications", [])
+
+            notification_manager = NotificationManager(notifications)
 
             # parse accounts
             for index, account in enumerate(config_data.get("accounts", [])):
@@ -186,7 +195,7 @@ def main():
         http_set_user_agent(args.user_agent)
 
     if enable_scheduler:
-        run_scheduler(config_data, args.language)
+        run_scheduler(config_data, args.language, notification_manager)
         return
 
     for index, game in enumerate(args.game):
@@ -196,7 +205,13 @@ def main():
         if account_identifiers[index]:
             identifier = account_identifiers[index]
 
-        game_perform_checkin(identifier, game, cookie, args.language)
+        game_perform_checkin(
+            identifier,
+            game,
+            cookie,
+            args.language,
+            notification_manager
+        )
 
 
 def has_legacy_environment_variable() -> bool:

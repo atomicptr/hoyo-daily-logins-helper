@@ -2,6 +2,8 @@
 
 Get hoyo daily login rewards automatically!
 
+![](https://i.imgur.com/LiWb3EG.png)
+
 ## Usage
 
 1. Get your cookie string, open the daily check in page
@@ -165,6 +167,18 @@ region = "Asia"
 ```
 
 If you are not setting the regions properly the scheduler will run at the wrong time.
+
+### Discord notifications
+
+If you want to ping a Discord channel create a webhook and add it to the configuration:
+
+```toml
+[config]
+# ...
+notifications = [
+    {type = "discord", webhook_url = "https://...."}
+]
+```
 
 ## License
 

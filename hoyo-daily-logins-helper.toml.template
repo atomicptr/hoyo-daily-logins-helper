@@ -1,5 +1,8 @@
 [config]
 language = "en-us"
+notifications = [
+    # {type = "discord", webhook_url = "..."}
+]
 
 [[accounts]]
 identifier = "My Genshin Account Name" # this serves no purpose beyond identification for you in the logs

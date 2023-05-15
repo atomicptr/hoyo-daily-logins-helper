@@ -1,10 +1,11 @@
 import json
+import logging
 import random
 import time
-import logging
+from typing import Optional
 
 from src.http import http_get_json, http_post_json
-
+from src.notifications import NotificationManager, Notification
 
 RET_CODE_ALREADY_SIGNED_IN = -5003
 
@@ -33,10 +34,11 @@ GAMES = {
 
 
 def game_perform_checkin(
-    account_ident: str,
-    game: str,
-    cookie_str: str,
-    language: str,
+        account_ident: str,
+        game: str,
+        cookie_str: str,
+        language: str,
+        notification_manager: Optional[NotificationManager]
 ):
     if game not in GAMES:
         raise Exception(f"unknown game identifier found: {game}")
@@ -106,6 +108,13 @@ def game_perform_checkin(
         return
     elif code != 0:
         logging.error(response['message'])
+        if notification_manager:
+            notification_manager.send(Notification(
+                success=False,
+                account_identifier=account_ident,
+                game_name=game_name,
+                message=response["message"],
+            ))
         return
 
     reward = awards[total_sign_in_day - 1]
@@ -114,3 +123,21 @@ def game_perform_checkin(
     logging.info(f"\tTotal Sign-in Days: {total_sign_in_day + 1}")
     logging.info(f"\tReward: {reward['cnt']}x {reward['name']}")
     logging.info(f"\tMessage: {response['message']}")
+
+    if notification_manager:
+        notification_manager.send(Notification(
+            success=True,
+            account_identifier=account_ident,
+            game_name=game_name,
+            message=response["message"],
+            custom_fields=[
+                {
+                    "key": "Total Sign-in days",
+                    "value": total_sign_in_day + 1
+                },
+                {
+                    "key": "Rewards",
+                    "value": f"{reward['cnt']}x {reward['name']}",
+                },
+            ],
+        ))
