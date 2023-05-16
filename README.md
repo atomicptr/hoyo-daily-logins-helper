@@ -37,8 +37,11 @@ $ docker run --rm --env HOYO_GAME=starrail --env HOYO_COOKIE="your cookie string
 ### pip
 
 ```bash
-$ pip install hoyo-daily-logins-helper
+$ pipx install hoyo-daily-logins-helper
 ```
+
+**Note**: While regular pip should work, it's highly recommended installing this
+tool via [pipx](https://pypa.github.io/pipx/) instead!
 
 PyPi: https://pypi.org/project/hoyo-daily-logins-helper/
 
