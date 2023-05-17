@@ -89,7 +89,6 @@ class NotificationManager:
     _handler: List[_NotificationHandler] = []
 
     def __init__(self, notifications: List[dict]):
-        print("yolo", notifications)
         for notification in notifications:
             if "type" not in notification:
                 logging.error(
