@@ -6,8 +6,8 @@ from typing import Optional
 import pytz
 from scheduler import Scheduler
 
-from src.games import game_perform_checkin
-from src.notifications import NotificationManager
+from hoyo_daily_logins_helper.games import game_perform_checkin
+from hoyo_daily_logins_helper.notifications import NotificationManager
 
 _RESET_TIME = {
     # running this one hour after reset to prevent potential fuckery with

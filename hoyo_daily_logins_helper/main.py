@@ -7,13 +7,13 @@ from typing import Optional
 
 import comboparse
 
-from src._version import __version__
-from src.consts import DEFAULT_LANGUAGE
-from src.games import GAMES, game_perform_checkin
-from src.http import http_set_user_agent
-from src.notifications import NotificationManager
-from src.scheduler import run_scheduler
-from src.utils import dict_prettify
+from hoyo_daily_logins_helper._version import __version__
+from hoyo_daily_logins_helper.consts import DEFAULT_LANGUAGE
+from hoyo_daily_logins_helper.games import GAMES, game_perform_checkin
+from hoyo_daily_logins_helper.http import http_set_user_agent
+from hoyo_daily_logins_helper.notifications import NotificationManager
+from hoyo_daily_logins_helper.scheduler import run_scheduler
+from hoyo_daily_logins_helper.utils import dict_prettify
 
 
 def main():

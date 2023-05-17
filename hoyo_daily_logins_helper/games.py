@@ -4,8 +4,9 @@ import random
 import time
 from typing import Optional
 
-from src.http import http_get_json, http_post_json
-from src.notifications import NotificationManager, Notification
+from hoyo_daily_logins_helper.http import http_get_json, http_post_json
+from hoyo_daily_logins_helper.notifications import NotificationManager, \
+    Notification
 
 RET_CODE_ALREADY_SIGNED_IN = -5003
 

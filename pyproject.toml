@@ -23,10 +23,10 @@ dependencies = [
 dynamic = ["version"]
 
 [project.scripts]
-hoyo-daily-logins-helper = "src.main:main"
+hoyo-daily-logins-helper = "hoyo_daily_logins_helper.main:main"
 
 [tool.setuptools]
 packages = {find = {exclude=["tests*"]}}
 
 [tool.setuptools_scm]
-write_to = "src/_version.py"
+write_to = "hoyo_daily_logins_helper/_version.py"

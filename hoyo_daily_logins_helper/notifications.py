@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 
-from src.http import http_post
+from hoyo_daily_logins_helper.http import http_post
 
 
 @dataclass

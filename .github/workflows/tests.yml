@@ -22,7 +22,7 @@ jobs:
           pip install .
           pip install ruff
       - name: Lint
-        run: ruff check src
+        run: ruff check hoyo_daily_logins_helper
       - name: Build
         run: |
           pip install build
