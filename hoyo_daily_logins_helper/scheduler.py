@@ -1,26 +1,15 @@
 import logging
-from datetime import datetime, timezone, time
+from datetime import datetime, timezone, time, timedelta
 from time import sleep
 from typing import Optional
 
 import pytz
 from scheduler import Scheduler
 
-from hoyo_daily_logins_helper.games import game_perform_checkin
+from hoyo_daily_logins_helper.games import game_perform_checkin, GAMES
 from hoyo_daily_logins_helper.notifications import NotificationManager
 
-_RESET_TIME = {
-    # running this one hour after reset to prevent potential fuckery with
-    # timezones
-    "hour": 5,
-    "minute": 1,
-}
-
-_RESET_TIMES = {
-    "Asia": time(tzinfo=pytz.timezone("Asia/Shanghai"), **_RESET_TIME),
-    "EU": time(tzinfo=pytz.timezone("CET"), **_RESET_TIME),
-    "NA": time(tzinfo=pytz.timezone("US/Pacific"), **_RESET_TIME),
-}
+_RESET_TIME = time(tzinfo=pytz.timezone("Asia/Shanghai"), hour=0, minute=5)
 
 
 def run_scheduler(
@@ -35,50 +24,40 @@ def run_scheduler(
     schedule = Scheduler(tzinfo=tz)
 
     accounts = config_data.get("accounts", [])
-    default_region = config_data.get("config", {}).get("region", None)
 
     for index, account in enumerate(accounts):
-        region = account.get("region", default_region)
-
-        if not region:
-            logging.error(f"Account #{index}: No region defined")
-            continue
-
-        if region not in _RESET_TIMES:
-            logging.error(f"Account #{index}: Invalid region set '{region}'")
-            continue
-
         identifier = account.get("identifier", None)
 
         if not identifier:
             identifier = f"Account #{index}"
 
-        checkin_job = create_checkin_job(
-            identifier,
-            account.get("game"),
-            account.get("cookie"),
-            language,
-            notifications_manager,
-        )
+        game = account.get("game")
+        game_name = GAMES[game]["name"]
 
-        job = schedule.daily(
-            _RESET_TIMES[region],
-            checkin_job
-        )
-
-        due_in_hours = round(
-            job.timedelta(datetime.now(tz=tz)).total_seconds() / 60 / 60,
-            1
+        schedule.daily(
+            _RESET_TIME,
+            create_checkin_job(
+                identifier,
+                game,
+                account.get("cookie"),
+                language,
+                notifications_manager,
+            )
         )
 
         logging.info(
-            f"Added account '{identifier}' to scheduler, region: '{region}', "
-            f"next fire time in {due_in_hours} hours"
+            f"Added {game_name} account '{identifier}' to scheduler"
         )
 
     if len(schedule.jobs) == 0:
         logging.error("No jobs scheduled")
         exit(1)
+
+    print_time_till_next_reset()
+    schedule.hourly(
+        time(minute=0, second=0, tzinfo=tz),
+        print_time_till_next_reset
+    )
 
     logging.debug("Job schedule:")
     logging.debug(schedule)
@@ -106,3 +85,23 @@ def create_checkin_job(
         )
 
     return _checkin_job
+
+
+def print_time_till_next_reset():
+    tz = datetime.now(timezone.utc).astimezone().tzinfo
+    now = datetime.now(tz=tz)
+    next_reset = datetime.now(tz=_RESET_TIME.tzinfo)
+    next_reset = next_reset.replace(
+        hour=_RESET_TIME.hour,
+        minute=_RESET_TIME.minute,
+        second=0,
+    )
+
+    if next_reset < now:
+        next_reset = next_reset.replace(day=next_reset.day+1)
+
+    diff = next_reset - now
+
+    hours = round(diff.total_seconds() / 60 / 60, 1)
+
+    logging.info(f"Next reset time is in {hours} hours.")

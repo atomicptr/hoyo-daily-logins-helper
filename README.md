@@ -147,30 +147,6 @@ enable_scheduler = true
 # ....
 ```
 
-This feature also requires you to set account regions which you can do like this:
-
-```toml
-[config]
-# ...
-enable_scheduler = true
-region = "EU"
-
-[[accounts]]
-identifier = "My Starrail Account #1"
-game = "starrail"
-cookie = "My Starrail Cookie..."
-# this account is in the EU region and we set this as the default so you dont have to do anything
-
-[[accounts]]
-identifier = "My Starrail Account #2"
-game = "starrail"
-cookie = "My Starrail Cookie..."
-# this account is in a different region so you have to explicitly overwrite this
-region = "Asia"
-```
-
-If you are not setting the regions properly the scheduler will run at the wrong time.
-
 ### Discord notifications
 
 If you want to ping a Discord channel, [create a webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) and add it to the configuration:
