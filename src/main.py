@@ -21,11 +21,20 @@ def main():
     cli_args = list(sys.argv[1:])
     default_file = Path("hoyo-daily-logins-helper.toml")
 
+    parser = comboparse.ComboParser(
+        prog="hoyo-daily-logins-helper",
+        description="Get hoyo daily login rewards automatically!",
+        env_prefix="HOYO",
+    )
+
     has_config_file = False
     has_single_game_flag = False
     has_legacy_cookie = False
 
-    if "--config-file" in cli_args:
+    if (
+            "--config-file" in cli_args or
+            parser.create_env_var_name("CONFIG_FILE") in os.environ
+    ):
         has_config_file = True
 
     if default_file.exists():
@@ -42,12 +51,6 @@ def main():
         has_single_game_flag = True
     if "COOKIE" in os.environ:
         has_legacy_cookie = True
-
-    parser = comboparse.ComboParser(
-        prog="hoyo-daily-logins-helper",
-        description="Get hoyo daily login rewards automatically!",
-        env_prefix="HOYO",
-    )
 
     parser.add_argument(
         "-c", "--cookie",
@@ -154,10 +157,11 @@ def main():
             if user_agent:
                 args.user_agent = user_agent
 
-            enable_scheduler = config_data.get("config", {})\
+            enable_scheduler = config_data.get("config", {}) \
                 .get("enable_scheduler", False)
 
-            notifications = config_data.get("config", {}).get("notifications", [])
+            notifications = config_data.get("config", {}).get("notifications",
+                                                              [])
 
             notification_manager = NotificationManager(notifications)
 
