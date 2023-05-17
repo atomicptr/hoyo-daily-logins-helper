@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timezone, time, timedelta
+from datetime import datetime, timezone, time
 from time import sleep
 from typing import Optional
 
