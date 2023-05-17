@@ -64,7 +64,7 @@ You can provide the cookie information either via the **HOYO_GAME** environment 
 
 ### Debug mode
 
-If something doesn't work properly and/or you want to report an issue try running the tool with the **DEBUG_MODE** environment variable set to 1! Or provide the --debug flag!
+If something doesn't work properly and/or you want to report an issue try running the tool with the **HOYO_DEBUG** environment variable set to 1! Or provide the --debug flag!
 
 ```bash
 $ HOYO_DEBUG=1 hoyo-daily-logins-helper --starrail --cookie="..."
@@ -86,7 +86,7 @@ You can run this tool for multiple accounts at once:
 $ hoyo-daily-logins-helper --game genshin --cookie "cookie for acc 1" --game starrail --cookie "cookie for acc 2"
 ```
 
-If you want to do this with environment variables it works basically the same, you just have to seperate the values by a ","
+If you want to do this with environment variables it works basically the same, you just have to separate the values by a ","
 
 ```bash
 $ HOYO_GAME=genshin,starrail HOYO_COOKIE="cookie 1 data...,cookie 2 data..." hoyo-daily-logins-helper
@@ -96,10 +96,10 @@ Although I'd recommend you to use a configuration file for this (see the next po
 
 ### Configuration file
 
-If there is a file called "hoyo-daily-logins-helper.toml" in the current working directory (or you provided one via --config-file) the tool will read data from there.
+If there is a file called "**hoyo-daily-logins-helper.toml**" in the current working directory (or you provided one via --config-file) the tool will read data from there.
 
 ```bash
-$ hoyo-daily-logins-helper --config-file ~/.my-hoyo-logins-helper-config.toml
+$ hoyo-daily-logins-helper --config-file ~/path/to/custom-config-file.toml
 ```
 
 Content:
@@ -135,7 +135,7 @@ cookie = "My Starrail Cookie..."
 
 ## Scheduler mode
 
-Scheduler mode can only be used if you are working with a configuration file. To
+Scheduler mode **can only be used if you are working with a configuration file**. To
 enable the scheduler mode, set ``enable_scheduler = true`` in the `config` section.
 
 ```toml
@@ -173,7 +173,7 @@ If you are not setting the regions properly the scheduler will run at the wrong 
 
 ### Discord notifications
 
-If you want to ping a Discord channel create a webhook and add it to the configuration:
+If you want to ping a Discord channel, [create a webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) and add it to the configuration:
 
 ```toml
 [config]
