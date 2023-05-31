@@ -107,6 +107,9 @@ def game_perform_checkin(
             "message": "Test Run, skipped actual checkin request"
         }
 
+    # as we logged in for a day, the number of total sign ins has to increase
+    total_sign_in_day += 1
+
     code = response.get("retcode", 99999)
 
     logging.debug(f"return code {code}")
