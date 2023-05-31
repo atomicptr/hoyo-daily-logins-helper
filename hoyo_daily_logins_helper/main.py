@@ -105,6 +105,12 @@ def main():
     )
 
     parser.add_argument(
+        "--skip-checkin",
+        help="skip check-in, used for testing",
+        action="store_true",
+    )
+
+    parser.add_argument(
         "-v", "--version",
         action="version",
         version=__version__,
@@ -214,7 +220,8 @@ def main():
             game,
             cookie,
             args.language,
-            notification_manager
+            notification_manager,
+            skip_checkin=args.skip_checkin
         )
 
 

@@ -39,7 +39,8 @@ def game_perform_checkin(
         game: str,
         cookie_str: str,
         language: str,
-        notification_manager: Optional[NotificationManager]
+        notification_manager: Optional[NotificationManager],
+        skip_checkin: bool = False,
 ):
     if game not in GAMES:
         raise Exception(f"unknown game identifier found: {game}")
@@ -98,7 +99,13 @@ def game_perform_checkin(
         "act_id": act_id,
     }, ensure_ascii=False)
 
-    response = http_post_json(sign_url, headers=headers, data=request_data)
+    if not skip_checkin:
+        response = http_post_json(sign_url, headers=headers, data=request_data)
+    else:
+        response = {
+            "retcode": 0,
+            "message": "Test Run, skipped actual checkin request"
+        }
 
     code = response.get("retcode", 99999)
 
