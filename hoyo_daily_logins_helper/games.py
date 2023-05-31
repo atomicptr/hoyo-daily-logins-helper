@@ -128,7 +128,7 @@ def game_perform_checkin(
     reward = awards[total_sign_in_day - 1]
 
     logging.info("Check-in complete!")
-    logging.info(f"\tTotal Sign-in Days: {total_sign_in_day + 1}")
+    logging.info(f"\tTotal Sign-in Days: {total_sign_in_day}")
     logging.info(f"\tReward: {reward['cnt']}x {reward['name']}")
     logging.info(f"\tMessage: {response['message']}")
 
@@ -141,7 +141,7 @@ def game_perform_checkin(
             custom_fields=[
                 {
                     "key": "Total Sign-in days",
-                    "value": total_sign_in_day + 1
+                    "value": total_sign_in_day
                 },
                 {
                     "key": "Rewards",
