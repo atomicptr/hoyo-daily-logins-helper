@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timezone, time
+from datetime import datetime, timezone, time, timedelta
 from time import sleep
 from typing import Optional
 
@@ -98,7 +98,7 @@ def print_time_till_next_reset():
     )
 
     if next_reset < now:
-        next_reset = next_reset.replace(day=next_reset.day+1)
+        next_reset = next_reset + timedelta(days=1)
 
     diff = next_reset - now
 
