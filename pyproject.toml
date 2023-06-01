@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "hoyo-daily-logins-helper"
 authors = [
-    {name = "Christopher Kaster", email = "me@atomicptr.de"},
+    { name = "Christopher Kaster", email = "me@atomicptr.de" },
 ]
 description = "Get hoyo daily login rewards automatically!"
 readme = "README.md"
@@ -26,13 +26,55 @@ dynamic = ["version"]
 hoyo-daily-logins-helper = "hoyo_daily_logins_helper.main:main"
 
 [tool.setuptools]
-packages = {find = {exclude=["tests*"]}}
+packages = { find = { exclude = ["tests*"] } }
 
 [tool.setuptools_scm]
 write_to = "hoyo_daily_logins_helper/_version.py"
 
 [tool.ruff]
-select = ["F", "E", "W", "B", "Q", "I", "N", "UP", "YTT"] # TODO: C90
+select = [ # TODO: C90, ANN, PLR
+    "ARG",
+    "ASYNC",
+    "B",
+    "BLE",
+    "C4",
+    "COM",
+    "DTZ",
+    "E",
+    "EM",
+    "ERA",
+    "F",
+    "FLY",
+    "G",
+    "I",
+    "ICN",
+    "INP",
+    "ISC",
+    "N",
+    "PIE",
+    "PLC",
+    "PLE",
+    "PLW",
+    "PT",
+    "PTH",
+    "PYI",
+    "Q",
+    "Q",
+    "RET",
+    "RSE",
+    "RUF",
+    "S",
+    "SIM",
+    "SLF",
+    "T20",
+    "TCH",
+    "TD",
+    "TID",
+    "UP",
+    "W",
+    "YTT",
+]
+ignore = ["G004", "S311"]
 
 [tool.ruff.flake8-quotes]
 docstring-quotes = "double"

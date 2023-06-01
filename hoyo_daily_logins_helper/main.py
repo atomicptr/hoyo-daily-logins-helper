@@ -41,7 +41,7 @@ def main():
         cli_args.append("--config-file")
         cli_args.append(default_file.absolute().__str__())
 
-    for game in GAMES.keys():
+    for game in GAMES:
         if f"--{game}" in cli_args:
             has_single_game_flag = True
 
@@ -69,7 +69,7 @@ def main():
         default=[],
     )
 
-    for game in GAMES.keys():
+    for game in GAMES:
         game_name = GAMES[game]["name"]
         parser.add_argument(
             f"--{game}",
@@ -120,7 +120,7 @@ def main():
     logging.basicConfig(
         level=logging.DEBUG if args.debug else logging.INFO,
         format="[%(asctime)s][%(levelname)s]: %(message)s",
-        datefmt="%Y-%m-%dT%H:%M:%S"
+        datefmt="%Y-%m-%dT%H:%M:%S",
     )
 
     logging.info(f"Hoyo Daily Logins Helper - v{__version__}")
@@ -147,7 +147,7 @@ def main():
     if args.config_file:
         logging.info(f"Found config file at: {args.config_file}")
 
-        with open(args.config_file, "rb") as file:
+        with Path.open(args.config_file, "rb") as file:
             config_data = tomllib.load(file)
             logging.debug(dict_prettify(config_data))
 
@@ -181,7 +181,7 @@ def main():
 
                 if game not in GAMES:
                     logging.error(
-                        f"account #{index} has invalid game '{game}' set"
+                        f"account #{index} has invalid game '{game}' set",
                     )
                     continue
 
@@ -196,9 +196,9 @@ def main():
     if len(args.cookie) != len(args.game):
         logging.error(
             f"number of cookies ({len(args.cookie)}) and "
-            f"games ({len(args.game)}) does not match"
+            f"games ({len(args.game)}) does not match",
         )
-        exit(1)
+        sys.exit(1)
 
     if args.user_agent:
         http_set_user_agent(args.user_agent)
@@ -220,12 +220,9 @@ def main():
             cookie,
             args.language,
             notification_manager,
-            skip_checkin=args.skip_checkin
+            skip_checkin=args.skip_checkin,
         )
 
 
 def has_legacy_environment_variable() -> bool:
-    for env_var in ["LANGUAGE", "COOKIE", "GAME"]:
-        if env_var in os.environ:
-            return True
-    return False
+    return any(env_var in os.environ for env_var in ["LANGUAGE", "COOKIE", "GAME"])

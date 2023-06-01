@@ -6,9 +6,11 @@ from requests import HTTPError, Response
 
 from hoyo_daily_logins_helper.utils import dict_prettify
 
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " \
-             "AppleWebKit/537.36 (KHTML, like Gecko) " \
-             "Chrome/74.0.3729.169 Safari/537.36"
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/74.0.3729.169 Safari/537.36"
+)
 _http_req_settings = {"user_agent": USER_AGENT}
 
 
@@ -40,7 +42,7 @@ def http_request(
         method: str,
         url: str,
         max_retries: int = 2,
-        **kwargs
+        **kwargs,
 ) -> Response:
     for i in range(max_retries + 1):
         try:
@@ -57,8 +59,7 @@ def http_request(
             logging.error(f"HTTP error: {e}, REQ: {i + 1}/{max_retries}")
         except KeyError as e:
             logging.error(f"Wrong response: {e}, REQ: {i + 1}/{max_retries}")
-        except Exception as e:
-            logging.error(f"Unknown error: {e}, REQ: {i + 1}/{max_retries}")
         else:
             return resp
-    raise Exception(f"All {max_retries} HTTP requests have failed")
+    msg = f"All {max_retries} HTTP requests have failed"
+    raise Exception(msg)

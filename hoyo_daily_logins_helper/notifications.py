@@ -1,9 +1,10 @@
 import json
 import logging
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 
 from hoyo_daily_logins_helper.http import http_post
+from hoyo_daily_logins_helper.utils import dict_prettify
 
 
 @dataclass
@@ -21,10 +22,10 @@ class _NotificationHandler:
 
     @staticmethod
     def create(data: dict):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def send(self, notification: Notification):
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
 @dataclass
@@ -34,7 +35,8 @@ class _DiscordNotificationHandler(_NotificationHandler):
     @staticmethod
     def create(data: dict):
         if "webhook_url" not in data:
-            raise Exception("No webhook_url defined in Discord notifications")
+            msg = "No webhook_url defined in Discord notifications"
+            raise Exception(msg)
         return _DiscordNotificationHandler(data["webhook_url"])
 
     def send(self, notification: Notification):
@@ -59,6 +61,8 @@ class _DiscordNotificationHandler(_NotificationHandler):
                 "inline": False,
             })
 
+        tz = datetime.now(UTC).astimezone().tzinfo
+
         data = json.dumps({
             "content": "",
             "embeds": [
@@ -74,9 +78,9 @@ class _DiscordNotificationHandler(_NotificationHandler):
                     "thumbnail": {
                         "url": "https://i.imgur.com/LiWb3EG.png",
                     },
-                    "timestamp": datetime.now().isoformat(),
-                }
-            ]
+                    "timestamp": datetime.now(tz=tz).isoformat(),
+                },
+            ],
         }, ensure_ascii=False)
 
         http_post(self.webhook_url, data=data, headers={
@@ -87,18 +91,18 @@ class _DiscordNotificationHandler(_NotificationHandler):
 class NotificationManager:
     _handler: list[_NotificationHandler] = []
 
-    def __init__(self, notifications: list[dict]):
+    def __init__(self, notifications: list[dict]) -> None:
         for notification in notifications:
             if "type" not in notification:
                 logging.error(
-                    "Notification entry without type found",
-                    notification
+                    "Notification entry without type found:"
+                    f"\n{dict_prettify(notification)}",
                 )
                 continue
             match notification["type"]:
                 case "discord":
                     self._handler.append(
-                        _DiscordNotificationHandler.create(notification)
+                        _DiscordNotificationHandler.create(notification),
                     )
                 case other_type:
                     logging.error(f"Unknown notification type {other_type}")

@@ -1,4 +1,5 @@
 import logging
+import sys
 from datetime import UTC, datetime, time, timedelta
 from time import sleep
 
@@ -14,7 +15,7 @@ _RESET_TIME = time(tzinfo=pytz.timezone("Asia/Shanghai"), hour=0, minute=5)
 def run_scheduler(
         config_data: dict,
         language: str,
-        notifications_manager: NotificationManager | None
+        notifications_manager: NotificationManager | None,
 ):
     logging.info("Run in scheduler mode")
 
@@ -41,21 +42,21 @@ def run_scheduler(
                 account.get("cookie"),
                 language,
                 notifications_manager,
-            )
+            ),
         )
 
         logging.info(
-            f"Added {game_name} account '{identifier}' to scheduler"
+            f"Added {game_name} account '{identifier}' to scheduler",
         )
 
     if len(schedule.jobs) == 0:
         logging.error("No jobs scheduled")
-        exit(1)
+        sys.exit(1)
 
     print_time_till_next_reset()
     schedule.hourly(
         time(minute=0, second=0, tzinfo=tz),
-        print_time_till_next_reset
+        print_time_till_next_reset,
     )
 
     logging.debug("Job schedule:")
@@ -71,7 +72,7 @@ def create_checkin_job(
         game: str,
         cookie_str: str,
         language: str,
-        notification_manager: NotificationManager | None
+        notification_manager: NotificationManager | None,
 ):
     def _checkin_job():
         logging.info(f"Running scheduler for '{account_ident}'...")
@@ -80,7 +81,7 @@ def create_checkin_job(
             game,
             cookie_str,
             language,
-            notification_manager
+            notification_manager,
         )
 
     return _checkin_job

@@ -28,7 +28,7 @@ GAMES = {
         "name": "Tears of Themis",
         "event_base_url": "https://sg-public-api.hoyolab.com/event/luna/os",
         "act_id": "e202202281857121",
-    }
+    },
 }
 
 
@@ -41,17 +41,20 @@ def game_perform_checkin(
         skip_checkin: bool = False,
 ):
     if game not in GAMES:
-        raise Exception(f"unknown game identifier found: {game}")
+        msg = f"unknown game identifier found: {game}"
+        raise Exception(msg)
 
     game_name = GAMES[game]["name"]
     event_base_url = GAMES[game]["event_base_url"]
     act_id = GAMES[game]["act_id"]
 
     referer_url = "https://act.hoyolab.com/"
-    reward_url = f"{event_base_url}/home?lang={language}" \
-                 f"&act_id={act_id}"
-    info_url = f"{event_base_url}/info?lang={language}" \
-               f"&act_id={act_id}"
+    reward_url = (
+        f"{event_base_url}/home?lang={language}&act_id={act_id}"
+    )
+    info_url = (
+        f"{event_base_url}/info?lang={language}&act_id={act_id}"
+    )
     sign_url = f"{event_base_url}/sign?lang={language}"
 
     headers = {
@@ -102,7 +105,7 @@ def game_perform_checkin(
     else:
         response = {
             "retcode": 0,
-            "message": "Test Run, skipped actual checkin request"
+            "message": "Test Run, skipped actual checkin request",
         }
 
     # as we logged in for a day, the number of total sign ins has to increase
@@ -115,7 +118,7 @@ def game_perform_checkin(
     if code == RET_CODE_ALREADY_SIGNED_IN:
         logging.info("Already signed in for today...")
         return
-    elif code != 0:
+    if code != 0:
         logging.error(response["message"])
         if notification_manager:
             notification_manager.send(Notification(
@@ -142,7 +145,7 @@ def game_perform_checkin(
             custom_fields=[
                 {
                     "key": "Total Sign-in days",
-                    "value": total_sign_in_day
+                    "value": total_sign_in_day,
                 },
                 {
                     "key": "Rewards",
