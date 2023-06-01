@@ -2,7 +2,6 @@ import json
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List
 
 from hoyo_daily_logins_helper.http import http_post
 
@@ -13,7 +12,7 @@ class Notification:
     game_name: str
     account_identifier: str
     message: str
-    custom_fields: List[dict] = ()
+    custom_fields: list[dict] = ()
 
 
 @dataclass
@@ -86,9 +85,9 @@ class _DiscordNotificationHandler(_NotificationHandler):
 
 
 class NotificationManager:
-    _handler: List[_NotificationHandler] = []
+    _handler: list[_NotificationHandler] = []
 
-    def __init__(self, notifications: List[dict]):
+    def __init__(self, notifications: list[dict]):
         for notification in notifications:
             if "type" not in notification:
                 logging.error(

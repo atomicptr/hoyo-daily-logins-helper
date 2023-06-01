@@ -3,7 +3,6 @@ import os
 import sys
 import tomllib
 from pathlib import Path
-from typing import Optional
 
 import comboparse
 
@@ -143,7 +142,7 @@ def main():
 
     enable_scheduler = False
     account_identifiers = [None for _ in args.game]
-    notification_manager: Optional[NotificationManager] = None
+    notification_manager: NotificationManager | None = None
 
     if args.config_file:
         logging.info(f"Found config file at: {args.config_file}")

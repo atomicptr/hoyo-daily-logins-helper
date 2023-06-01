@@ -1,12 +1,11 @@
 import logging
-from datetime import datetime, timezone, time, timedelta
+from datetime import UTC, datetime, time, timedelta
 from time import sleep
-from typing import Optional
 
 import pytz
 from scheduler import Scheduler
 
-from hoyo_daily_logins_helper.games import game_perform_checkin, GAMES
+from hoyo_daily_logins_helper.games import GAMES, game_perform_checkin
 from hoyo_daily_logins_helper.notifications import NotificationManager
 
 _RESET_TIME = time(tzinfo=pytz.timezone("Asia/Shanghai"), hour=0, minute=5)
@@ -15,11 +14,11 @@ _RESET_TIME = time(tzinfo=pytz.timezone("Asia/Shanghai"), hour=0, minute=5)
 def run_scheduler(
         config_data: dict,
         language: str,
-        notifications_manager: Optional[NotificationManager]
+        notifications_manager: NotificationManager | None
 ):
     logging.info("Run in scheduler mode")
 
-    tz = datetime.now(timezone.utc).astimezone().tzinfo
+    tz = datetime.now(UTC).astimezone().tzinfo
 
     schedule = Scheduler(tzinfo=tz)
 
@@ -72,7 +71,7 @@ def create_checkin_job(
         game: str,
         cookie_str: str,
         language: str,
-        notification_manager: Optional[NotificationManager]
+        notification_manager: NotificationManager | None
 ):
     def _checkin_job():
         logging.info(f"Running scheduler for '{account_ident}'...")
@@ -88,7 +87,7 @@ def create_checkin_job(
 
 
 def print_time_till_next_reset():
-    tz = datetime.now(timezone.utc).astimezone().tzinfo
+    tz = datetime.now(UTC).astimezone().tzinfo
     now = datetime.now(tz=tz)
     next_reset = datetime.now(tz=_RESET_TIME.tzinfo)
     next_reset = next_reset.replace(

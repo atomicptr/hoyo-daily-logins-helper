@@ -30,3 +30,12 @@ packages = {find = {exclude=["tests*"]}}
 
 [tool.setuptools_scm]
 write_to = "hoyo_daily_logins_helper/_version.py"
+
+[tool.ruff]
+select = ["F", "E", "W", "B", "Q", "I", "N", "UP", "YTT"] # TODO: C90
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = []

@@ -2,11 +2,9 @@ import json
 import logging
 import random
 import time
-from typing import Optional
 
 from hoyo_daily_logins_helper.http import http_get_json, http_post_json
-from hoyo_daily_logins_helper.notifications import NotificationManager, \
-    Notification
+from hoyo_daily_logins_helper.notifications import Notification, NotificationManager
 
 RET_CODE_ALREADY_SIGNED_IN = -5003
 
@@ -39,7 +37,7 @@ def game_perform_checkin(
         game: str,
         cookie_str: str,
         language: str,
-        notification_manager: Optional[NotificationManager],
+        notification_manager: NotificationManager | None,
         skip_checkin: bool = False,
 ):
     if game not in GAMES:
@@ -118,7 +116,7 @@ def game_perform_checkin(
         logging.info("Already signed in for today...")
         return
     elif code != 0:
-        logging.error(response['message'])
+        logging.error(response["message"])
         if notification_manager:
             notification_manager.send(Notification(
                 success=False,

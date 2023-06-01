@@ -1,6 +1,5 @@
 import json
 import logging
-from typing import Dict
 
 import requests
 from requests import HTTPError, Response
@@ -21,7 +20,7 @@ def http_get(url: str, max_retries: int = 2, **kwargs) -> Response:
     return http_request("get", url, max_retries, **kwargs)
 
 
-def http_get_json(url: str, max_retries: int = 2, **kwargs) -> Dict[str, any]:
+def http_get_json(url: str, max_retries: int = 2, **kwargs) -> dict[str, any]:
     resp = http_get(url, max_retries, **kwargs)
     data = resp.text
     return json.loads(data)
@@ -31,7 +30,7 @@ def http_post(url: str, max_retries: int = 2, **kwargs) -> Response:
     return http_request("post", url, max_retries, **kwargs)
 
 
-def http_post_json(url: str, max_retries: int = 2, **kwargs) -> Dict[str, any]:
+def http_post_json(url: str, max_retries: int = 2, **kwargs) -> dict[str, any]:
     resp = http_post(url, max_retries, **kwargs)
     data = resp.text
     return json.loads(data)
