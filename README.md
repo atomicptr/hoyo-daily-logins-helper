@@ -108,7 +108,11 @@ Content:
 # you can configurate some things here like the language or the user agent
 # keep in mind that config and every key in there is optional and you can omit it
 [config]
+# i'd recommend against changing this value unless you know what you are doing
+# not setting this will make it look to the developer like we are using a normal
+# web browser while this is very suspicious
 user-agent = "My fancy user agent"
+# the language of the rewards and presumably return messages from the API
 language = "en-us"
 
 # every account starts with this index/key 
@@ -157,6 +161,9 @@ If you want to ping a Discord channel, [create a webhook](https://support.discor
 notifications = [
     {type = "discord", webhook_url = "https://...."}
 ]
+
+[[accounts]]
+# ....
 ```
 
 ## License
