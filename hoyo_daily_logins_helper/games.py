@@ -13,23 +13,32 @@ GAMES = {
         "name": "Genshin Impact",
         "event_base_url": "https://hk4e-api-os.mihoyo.com/event/sol",
         "act_id": "e202102251931481",
+        "login_url": "https://act.hoyolab.com/ys/event/signin-sea-v3/index.html"
+                     "?act_id=e202102251931481",
     },
     "starrail": {
         "name": "Honkai: Star Rail",
         "event_base_url": "https://sg-public-api.hoyolab.com/event/luna/os",
         "act_id": "e202303301540311",
+        "login_url": "https://act.hoyolab.com/bbs/event/signin/hkrpg/index.html"
+                     "?act_id=e202303301540311",
     },
     "honkai": {
         "name": "Honkai Impact 3rd",
         "event_base_url": "https://sg-public-api.hoyolab.com/event/mani",
         "act_id": "e202110291205111",
+        "login_url": "https://act.hoyolab.com/bbs/event/signin-bh3/index.html"
+                     "?act_id=e202110291205111",
     },
     "themis": {
         "name": "Tears of Themis",
         "event_base_url": "https://sg-public-api.hoyolab.com/event/luna/os",
         "act_id": "e202202281857121",
+        "login_url": "https://act.hoyolab.com/bbs/event/signin/nxx/index.html"
+                     "?act_id=e202202281857121",
     },
 }
+_CAPTCHA_MESSAGE = """Captcha is required, please sign into the website: %s"""
 
 
 def game_perform_checkin(
@@ -47,6 +56,7 @@ def game_perform_checkin(
     game_name = GAMES[game]["name"]
     event_base_url = GAMES[game]["event_base_url"]
     act_id = GAMES[game]["act_id"]
+    login_url = GAMES[game]["login_url"]
 
     referer_url = "https://act.hoyolab.com/"
     reward_url = (
@@ -118,6 +128,19 @@ def game_perform_checkin(
     if code == RET_CODE_ALREADY_SIGNED_IN:
         logging.info("Already signed in for today...")
         return
+
+    if is_captcha_required(response):
+        msg = _CAPTCHA_MESSAGE % login_url
+        logging.error(msg)
+        if notification_manager:
+            notification_manager.send(Notification(
+                success=False,
+                account_identifier=account_ident,
+                game_name=game_name,
+                message=msg,
+            ))
+        return
+
     if code != 0:
         logging.error(response["message"])
         if notification_manager:
@@ -153,3 +176,16 @@ def game_perform_checkin(
                 },
             ],
         ))
+
+
+def is_captcha_required(response: dict) -> bool:
+    if "gt_result" not in response:
+        return False
+
+    gt = response["gt_result"]["gt"]
+    challenge = response["gt_result"]["challenge"]
+
+    if not gt and not challenge:
+        return False
+
+    return True

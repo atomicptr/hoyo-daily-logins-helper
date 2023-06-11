@@ -34,7 +34,6 @@ write_to = "hoyo_daily_logins_helper/_version.py"
 [tool.ruff]
 select = [ # TODO: C90, ANN, PLR
     "ARG",
-    "ASYNC",
     "B",
     "BLE",
     "C4",
@@ -44,7 +43,6 @@ select = [ # TODO: C90, ANN, PLR
     "EM",
     "ERA",
     "F",
-    "FLY",
     "G",
     "I",
     "ICN",
@@ -68,7 +66,6 @@ select = [ # TODO: C90, ANN, PLR
     "SLF",
     "T20",
     "TCH",
-    "TD",
     "TID",
     "UP",
     "W",
