@@ -25,7 +25,7 @@ jobs:
           poetry self add "poetry-dynamic-versioning[plugin]"
           poetry install
       - name: Lint
-        run: ruff check hoyo_daily_logins_helper
+        run: poetry run ruff check hoyo_daily_logins_helper
       - name: Build
         run: |
           poetry build
