@@ -157,7 +157,17 @@ def main():
             if language:
                 args.language = language
 
-            user_agent = config_data.get("config", {}).get("user-agent", None)
+            user_agent = config_data.get("config", {}).get("user_agent", None)
+
+            # TODO: remove this eventually
+            if not user_agent:
+                user_agent = config_data.get("config", {})\
+                    .get("user-agent", None)
+                if user_agent:
+                    logging.warning(
+                        "DEPRECATED: using deprecated user-agent configuration"
+                        ", please use user_agent instead!",
+                    )
 
             if user_agent:
                 args.user_agent = user_agent

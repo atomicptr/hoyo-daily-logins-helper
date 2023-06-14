@@ -111,7 +111,7 @@ Content:
 # i'd recommend against changing this value unless you know what you are doing
 # not setting this will make it look to the developer like we are using a normal
 # web browser while this is very suspicious
-user-agent = "My fancy user agent"
+user_agent = "My fancy user agent"
 # the language of the rewards and presumably return messages from the API
 language = "en-us"
 
