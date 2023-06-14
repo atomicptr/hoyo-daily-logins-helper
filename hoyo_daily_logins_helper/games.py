@@ -39,6 +39,10 @@ GAMES = {
     },
 }
 _CAPTCHA_MESSAGE = """Captcha is required, please sign into the website: %s"""
+_COULD_NOT_CLAIM = (
+    "Could not automatically claim rewards, please log in "
+    "manually again here: %s"
+)
 
 
 def game_perform_checkin(
@@ -118,8 +122,31 @@ def game_perform_checkin(
             "message": "Test Run, skipped actual checkin request",
         }
 
-    # as we logged in for a day, the number of total sign ins has to increase
-    total_sign_in_day += 1
+    # check if info has changed
+    info_list = http_get_json(info_url, headers=headers)
+
+    if not info_list.get("data"):
+        message = info_list.get("message", "None")
+        logging.error(f"Could not retrieve data from API endpoint: {message}")
+        return
+
+    new_total_sign_in_day = info_list.get("data", {}).get("total_sign_day")
+    already_signed_in = info_list.get("data", {}).get("is_sign")
+
+    if not already_signed_in or new_total_sign_in_day == total_sign_in_day:
+        msg = _COULD_NOT_CLAIM % login_url
+        logging.error(msg)
+        if notification_manager:
+            notification_manager.send(Notification(
+                success=False,
+                account_identifier=account_ident,
+                game_name=game_name,
+                message=msg,
+            ))
+        return
+
+    # since everything is good now, set total sign in days to the new value
+    total_sign_in_day = new_total_sign_in_day
 
     code = response.get("retcode", 99999)
 
