@@ -19,13 +19,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install .
-          pip install ruff
+          pip install poetry
+          poetry self add "poetry-dynamic-versioning[plugin]"
+          poetry install
       - name: Lint
         run: ruff check hoyo_daily_logins_helper
       - name: Build
         run: |
-          pip install build
-          make build
-          make install
+          poetry build
+          python -m pip install dist/hoyo_daily_logins_helper-*.whl --force-reinstall
           which hoyo-daily-logins-helper

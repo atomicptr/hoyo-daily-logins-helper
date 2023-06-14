@@ -1,10 +1,10 @@
 import logging
 import os
 import sys
-import tomllib
 from pathlib import Path
 
 import comboparse
+import tomllib
 
 from hoyo_daily_logins_helper._version import __version__
 from hoyo_daily_logins_helper.consts import DEFAULT_LANGUAGE

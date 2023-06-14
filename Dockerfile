@@ -4,8 +4,10 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip install build && \
-    python -m build --sdist --wheel --outdir dist/ .
+RUN pip install poetry && \
+    poetry self add "poetry-dynamic-versioning[plugin]" && \
+    poetry install --without dev && \
+    poetry build
 
 FROM alpine:3.18
 LABEL org.opencontainers.image.source="https://github.com/atomicptr/hoyo-daily-logins-helper"

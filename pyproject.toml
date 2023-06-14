@@ -1,35 +1,37 @@
-[build-system]
-requires = ["setuptools", "setuptools_scm"]
-build-backend = "setuptools.build_meta"
-
-[project]
+[tool.poetry]
 name = "hoyo-daily-logins-helper"
-authors = [
-    { name = "Christopher Kaster", email = "me@atomicptr.de" },
-]
 description = "Get hoyo daily login rewards automatically!"
+authors = ["Christopher Kaster <me@atomicptr.de>"]
+license = "GPLv3"
 readme = "README.md"
-requires-python = ">=3.11"
-keywords = ["genshin", "genshin-impact", "starrail", "honkai-starrail", "game"]
-classifiers = [
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-]
-dependencies = [
-    "requests",
-    "comboparse",
-    "scheduler",
-    "pytz",
-]
-dynamic = ["version"]
+packages = [{include = "hoyo_daily_logins_helper"}]
 
-[project.scripts]
+# required, but set automatically by poetry-dynamic-versioning
+version = "0.0.0"
+
+[tool.poetry.scripts]
 hoyo-daily-logins-helper = "hoyo_daily_logins_helper.main:main"
 
-[tool.setuptools]
-packages = { find = { exclude = ["tests*"] } }
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+comboparse = "^1.0.1"
+scheduler = "^0.8.4"
+pytz = "^2023.3"
 
-[tool.setuptools_scm]
-write_to = "hoyo_daily_logins_helper/_version.py"
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.272"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+bump = true
+strict = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.ruff]
 select = [ # TODO: C90, ANN, PLR
