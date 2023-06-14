@@ -2,9 +2,15 @@
 name = "hoyo-daily-logins-helper"
 description = "Get hoyo daily login rewards automatically!"
 authors = ["Christopher Kaster <me@atomicptr.de>"]
-license = "GPLv3"
+license = "GPL-3.0-or-later"
+homepage = "https://github.com/atomicptr/hoyo-daily-logins-helper"
+repository = "https://github.com/atomicptr/hoyo-daily-logins-helper"
 readme = "README.md"
 packages = [{include = "hoyo_daily_logins_helper"}]
+keywords = ["genshin", "genshin-impact", "starrail", "honkai-starrail", "game"]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+]
 
 # required, but set automatically by poetry-dynamic-versioning
 version = "0.0.0"

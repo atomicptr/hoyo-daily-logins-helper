@@ -21,7 +21,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install poetry
+          pip install pipx
+          pipx install poetry
           poetry self add "poetry-dynamic-versioning[plugin]"
           poetry install
       - name: Lint
