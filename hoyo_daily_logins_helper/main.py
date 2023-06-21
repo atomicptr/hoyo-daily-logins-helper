@@ -142,6 +142,7 @@ def main():
 
     enable_scheduler = False
     account_identifiers = [None for _ in args.game]
+    checkin_times = [None for _ in args.game]
     notification_manager: NotificationManager | None = None
 
     if args.config_file:
@@ -184,6 +185,7 @@ def main():
             for index, account in enumerate(config_data.get("accounts", [])):
                 game = account.get("game", None)
                 cookie = account.get("cookie", None)
+                checkin_time = account.get("checkin_time", None)
 
                 if not game:
                     logging.error(f"account #{index} has no game selected")
@@ -202,6 +204,7 @@ def main():
                 account_identifiers.append(account.get("identifier", None))
                 args.game.append(game)
                 args.cookie.append(cookie)
+                checkin_times.append(checkin_time)
 
     if len(args.cookie) != len(args.game):
         logging.error(
@@ -214,7 +217,12 @@ def main():
         http_set_user_agent(args.user_agent)
 
     if enable_scheduler:
-        run_scheduler(config_data, args.language, notification_manager)
+        run_scheduler(
+            config_data,
+            args.language,
+            checkin_times,
+            notification_manager,
+        )
         return
 
     for index, game in enumerate(args.game):

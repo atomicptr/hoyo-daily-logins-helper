@@ -166,6 +166,26 @@ notifications = [
 # ....
 ```
 
+### Adjusting schedule times
+
+The daily logins reset is globally the same at 00:00 Asia/Shanghai, but for various
+reasons you might want to delay this so we added an option for this in the accounts section.
+
+```toml
+[config]
+...
+
+[[accounts]]
+game = "genshin"
+# example for configuring everything
+checkin_time = {hour = 17, minute = 0, timezone = "Europe/Berlin"}
+
+[[accounts]]
+game = "starrail"
+# example for only configurating this partially, in this case we want to have the script run at 00:42
+checkin_time = {minute = 42}
+```
+
 ## License
 
 GNU General Public License v3
