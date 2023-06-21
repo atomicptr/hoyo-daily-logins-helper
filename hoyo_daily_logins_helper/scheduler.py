@@ -31,6 +31,7 @@ def run_scheduler(
     for index, account in enumerate(accounts):
         identifier = account.get("identifier", None)
         checkin_time = account.get("checkin_time", None)
+        only_report_failure = account.get("only_report_failure", False)
 
         if not identifier:
             identifier = f"Account #{index}"
@@ -59,6 +60,7 @@ def run_scheduler(
                 game,
                 account.get("cookie"),
                 language,
+                only_report_failure,
                 notifications_manager,
             ),
         )
@@ -92,6 +94,7 @@ def create_checkin_job(
         game: str,
         cookie_str: str,
         language: str,
+        only_report_failure: bool,
         notification_manager: NotificationManager | None,
 ):
     def _checkin_job():
@@ -102,6 +105,7 @@ def create_checkin_job(
             cookie_str,
             language,
             notification_manager,
+            only_report_failure=only_report_failure,
         )
 
     return _checkin_job

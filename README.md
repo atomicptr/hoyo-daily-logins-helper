@@ -166,6 +166,17 @@ notifications = [
 # ....
 ```
 
+You can set accounts to only report on failure if you set the ```only_report_failure``` property.
+
+```toml
+[conifg]
+# ...
+
+[[accounts]]
+game = "genshin"
+only_report_failure = true
+```
+
 ### Adjusting schedule times
 
 The daily logins reset is globally the same at 00:00 Asia/Shanghai, but for various
@@ -173,7 +184,7 @@ reasons you might want to delay this so we added an option for this in the accou
 
 ```toml
 [config]
-...
+# ...
 
 [[accounts]]
 game = "genshin"

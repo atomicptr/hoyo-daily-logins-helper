@@ -52,6 +52,7 @@ def game_perform_checkin(
         language: str,
         notification_manager: NotificationManager | None,
         skip_checkin: bool = False,
+        only_report_failure: bool = False,
 ):
     if game not in GAMES:
         msg = f"unknown game identifier found: {game}"
@@ -186,7 +187,7 @@ def game_perform_checkin(
     logging.info(f"\tReward: {reward['cnt']}x {reward['name']}")
     logging.info(f"\tMessage: {response['message']}")
 
-    if notification_manager:
+    if notification_manager and not only_report_failure:
         notification_manager.send(Notification(
             success=True,
             account_identifier=account_ident,
