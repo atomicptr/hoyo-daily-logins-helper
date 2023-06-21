@@ -43,6 +43,7 @@ _COULD_NOT_CLAIM = (
     "Could not automatically claim rewards, please log in "
     "manually again here: %s"
 )
+_DEFAULT_REPORT_ON = ("success", "failure")
 
 
 def game_perform_checkin(
@@ -52,7 +53,7 @@ def game_perform_checkin(
         language: str,
         notification_manager: NotificationManager | None,
         skip_checkin: bool = False,
-        only_report_failure: bool = False,
+        report_on: list[str] = _DEFAULT_REPORT_ON,
 ):
     if game not in GAMES:
         msg = f"unknown game identifier found: {game}"
@@ -137,7 +138,7 @@ def game_perform_checkin(
     if not already_signed_in or new_total_sign_in_day == total_sign_in_day:
         msg = _COULD_NOT_CLAIM % login_url
         logging.error(msg)
-        if notification_manager:
+        if notification_manager and "failure" in report_on:
             notification_manager.send(Notification(
                 success=False,
                 account_identifier=account_ident,
@@ -160,7 +161,7 @@ def game_perform_checkin(
     if is_captcha_required(response):
         msg = _CAPTCHA_MESSAGE % login_url
         logging.error(msg)
-        if notification_manager:
+        if notification_manager and "failure" in report_on:
             notification_manager.send(Notification(
                 success=False,
                 account_identifier=account_ident,
@@ -171,7 +172,7 @@ def game_perform_checkin(
 
     if code != 0:
         logging.error(response["message"])
-        if notification_manager:
+        if notification_manager and "failure" in report_on:
             notification_manager.send(Notification(
                 success=False,
                 account_identifier=account_ident,
@@ -187,7 +188,7 @@ def game_perform_checkin(
     logging.info(f"\tReward: {reward['cnt']}x {reward['name']}")
     logging.info(f"\tMessage: {response['message']}")
 
-    if notification_manager and not only_report_failure:
+    if notification_manager and "success" in report_on:
         notification_manager.send(Notification(
             success=True,
             account_identifier=account_ident,

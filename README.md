@@ -166,7 +166,20 @@ notifications = [
 # ....
 ```
 
-You can set accounts to only report on failure if you set the ```only_report_failure``` property.
+You can globally disable failure or success reports by adding the ```on``` property to the webhook
+
+```toml
+[config]
+# ...
+notifications = [
+    {type = "discord", webhook_url = "https://....", on = ["failure"]}
+]
+
+[[accounts]]
+# ....
+```
+
+You can also set accounts to only report on failure if you set the ```report_on``` property.
 
 ```toml
 [conifg]
@@ -174,13 +187,13 @@ You can set accounts to only report on failure if you set the ```only_report_fai
 
 [[accounts]]
 game = "genshin"
-only_report_failure = true
+report_on = ["failure"]
 ```
 
 ### Adjusting schedule times
 
 The daily logins reset is globally the same at 00:00 Asia/Shanghai, but for various
-reasons you might want to delay this so we added an option for this in the accounts section.
+reasons you might want to delay this, so we added an option for this in the accounts section.
 
 ```toml
 [config]

@@ -18,7 +18,7 @@ class Notification:
 
 @dataclass
 class _NotificationHandler:
-    pass
+    on: list[str]
 
     @staticmethod
     def create(data: dict):
@@ -26,6 +26,12 @@ class _NotificationHandler:
 
     def send(self, notification: Notification):
         raise NotImplementedError
+
+    def run_on_success(self) -> bool:
+        return "success" in self.on
+
+    def run_on_failure(self) -> bool:
+        return "failure" in self.on
 
 
 @dataclass
@@ -37,9 +43,17 @@ class _DiscordNotificationHandler(_NotificationHandler):
         if "webhook_url" not in data:
             msg = "No webhook_url defined in Discord notifications"
             raise Exception(msg)
-        return _DiscordNotificationHandler(data["webhook_url"])
+        if "on" not in data:
+            data["on"] = ["success", "failure"]
+        return _DiscordNotificationHandler(data["on"], data["webhook_url"])
 
     def send(self, notification: Notification):
+        if notification.success and not self.run_on_success():
+            return
+
+        if not notification.success and not self.run_on_failure():
+            return
+
         color_success = 4431943
         color_failure = 15022389
 
