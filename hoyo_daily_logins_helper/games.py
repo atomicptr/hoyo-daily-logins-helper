@@ -59,6 +59,9 @@ def game_perform_checkin(
         msg = f"unknown game identifier found: {game}"
         raise Exception(msg)
 
+    # some initial sleeping to off-set multiple runs a bit
+    sleep_random_time(15.0)
+
     game_name = GAMES[game]["name"]
     event_base_url = GAMES[game]["event_base_url"]
     act_id = GAMES[game]["act_id"]
@@ -108,9 +111,7 @@ def game_perform_checkin(
     logging.info(f"Checking in account for {today}...")
 
     # a normal human can't instantly click, so we wait a bit
-    sleep_time = random.uniform(2.0, 10.0)
-    logging.debug(f"Sleep for {sleep_time}")
-    time.sleep(sleep_time)
+    sleep_random_time()
 
     request_data = json.dumps({
         "act_id": act_id,
@@ -218,3 +219,9 @@ def is_captcha_required(response: dict) -> bool:
         return False
 
     return True
+
+
+def sleep_random_time(until: float = 30.0):
+    sleep_time = random.uniform(2.0, until)
+    logging.debug(f"Sleep for {sleep_time}")
+    time.sleep(sleep_time)
