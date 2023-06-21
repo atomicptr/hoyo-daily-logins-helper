@@ -17,7 +17,6 @@ _RESET_TIMEZONE = "Asia/Shanghai"
 def run_scheduler(
         config_data: dict,
         language: str,
-        checkin_times: list[None | dict],
         notifications_manager: NotificationManager | None,
 ):
     logging.info("Run in scheduler mode")
@@ -31,7 +30,7 @@ def run_scheduler(
 
     for index, account in enumerate(accounts):
         identifier = account.get("identifier", None)
-        checkin_time = checkin_times[index]
+        checkin_time = account.get("checkin_time", None)
 
         if not identifier:
             identifier = f"Account #{index}"
